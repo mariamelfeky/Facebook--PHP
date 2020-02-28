@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <style>
+        #post {
+            background-color: whitesmoke;
+            text-align: center;
+            border: 2px solid lightsteelblue;
+            border-radius: 50%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <form action="postcontroller.php" method="POST" enctype ="multipart/form data">
+        <lable>Name</lable>
+        <input type="text" name="userName" />
+        <br />
+        <label for="email">User Email</label>
+        <input type="email" name="email">
+        <br />
+        <label>Image Profile</label>
+        <input type="file" name="image" />
+        <input type="hidden" name= "MAX_FILE_SIZE" value= "1000000"/>  
+        <br/>
+        <lable>Password</lable>
+        <input type="password" name="password" />
+        <br />
+        <input type="submit" name="login" value="login" />
+
+    </form>
+</body>
+
+</html>
