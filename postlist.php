@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
     <head>
         <style>
@@ -66,7 +68,7 @@
         </tr>     
            <form method="POST" action="postcontroller.php" enctype ="multipart/form-data">
             <tr class="group">
-               <td colspan="3"><input  type="text" id="new" name="newpost"  placeholder="What is in your mind?" /></td>
+               <td colspan="4"><input  type="text" id="new" name="newpost"  placeholder="What is in your mind?" /></td>
             </tr>
             <tr class="group" >
                 <td>
@@ -87,8 +89,8 @@
                 $result=mysqli_query($connect,"select * from post inner join user as u  
                 where id_user = u.id;");
 
-                while($row=mysqli_fetch_assoc($result))
-    {           $postimage = "view/upload/".$row['postImage'];
+                while($row=mysqli_fetch_assoc($result)){
+             $postimage = "view/upload/".$row['postImage'];
                 $imgPost = $row['postImage'];
                 $userid = $row['id'];
                 $id =$_SESSION['id'];
@@ -107,6 +109,7 @@
         <td><a href='postDelete.php?id={$row['id']}'>Delete</a></td>
         <td><a href='postEdit.php?id={$row['id']}'>Edit</a></td>";
         }
+    
         echo "
        </tr>";
        if($imgPost!==null){
@@ -127,10 +130,9 @@
             <td>
             <p>{$comm['content']}</p>
        </td></tr>";
-       ?>
-    
            }
         }
+       ?>
        <tr>  
        <form method='POST' action='postcontroller.php'>
             <td><input type='text' id='newcomment' name='newcomment' placeholder='write your comment'/></td>
@@ -142,17 +144,24 @@
                 echo"
            <td><a href='commentdelete.php?id={$row['id']}'>Delete</a></td>
            <td><a href='commentedit.php?id={$row['id']}'>Edit</a></td>";
+           
             }
-            echo"
+            ?>
+        <?php
+            echo" 
          </tr>";
-            else{
-                echo "error connection DB";
-            }
+        }}
+        ?>  
+        <?php
+        // else{
+        //         echo "error connection DB";
+        //     }
             
             ?>
           
+          
             <tr>
-                <td colspan="3">
+                <td colspan="4">
                <pre id="post">
                   content
                </pre>
@@ -161,8 +170,7 @@
             </tr>
 
         </table>
-           
 
-        <body>
+        </body>
 
-<html>
+</html>
