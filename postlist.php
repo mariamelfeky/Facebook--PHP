@@ -52,12 +52,14 @@
                
                <?php 
                 session_start();
-                $imgProfile = $_SESSION['imgProfile']
+                $name = $_SESSION['name'];
+                $imgProfile = $_SESSION['imgProfile'];
+                $imgPath = "view/upload/".$imgProfile;
                if(isset($_SESSION['name'])){
-                echo "Welcome"." ".$_SESSION['name'];
-                echo "<img src='$imgProfile' style = 'border-radius: 50%; width:100px; height:100px; '/>";
+                echo "<h2>Welcome $name</h2>";
+                echo "<img src='$imgPath' style = 'border-radius: 50%; width:100px; height:100px; '/>";
                 }else{
-               // header("Location:loginPage.html");
+                header("Location: view/bootstrap/login/login.html");
                 }
                 ?>
                 
@@ -70,9 +72,8 @@
                 <td>
             <input type="file" name="image" /> 
              <br/>
-                </td>
+            </td>
           </tr>
-            
             <tr>
                 <td><input type="submit" name="add" value="publish"/></td>
             </tr>
@@ -83,32 +84,67 @@
             $connect = mysqli_connect("localhost","root","mariam@2468","studentphp");
             if($connect){
                 //echo "connected DB";
-                $result=mysqli_query($connect,"select * from post");
-                session_start();
+                $result=mysqli_query($connect,"select * from post inner join user as u  
+                where id_user = u.id;");
 
                 while($row=mysqli_fetch_assoc($result))
     {           $postimage = "view/upload/".$row['postImage'];
+                $imgPost = $row['postImage'];
+                $userid = $row['id'];
+                $id =$_SESSION['id'];
+               // echo $userid;
+               // echo $_SESSION['id'];
         echo
-         "<tr > 
-        <td class='newpost'>{$row['content']}</td>
-     
-        if($_SESSION['name']==$row['name']){
+         "<tr>
+         <td style='text-align = left'>
+         <h3>{$row['name']}</h3> 
+         </td>
+         </tr>
+         <tr > 
+        <td class='newpost'>{$row['content']}</td>";
+        if($userid==$id){
+            echo"
         <td><a href='postDelete.php?id={$row['id']}'>Delete</a></td>
-        <td><a href='postEdit.php?id={$row['id']}'>Edit</a></td>
+        <td><a href='postEdit.php?id={$row['id']}'>Edit</a></td>";
         }
-       </tr>
-       <tr> <img style='width:100px; height:100px;' src ='$postimage' />
-       </tr>
-       <tr>
+        echo "
+       </tr>";
+       if($imgPost!==null){
+           echo"
+       <tr><td> <img style='width:500px; height:400px;' src ='$postimage' />
+       <td>
+       </tr>";
+       }
+       
+       $comment = mysqli_query($connect,"select c.id,c.content,u.`name` from comment as c 
+       inner join user as u on id_user=u.id 
+       inner join post as p on id_post = p.id;");
+       while($comm = mysqli_fetch_assoc($comment)){
+           if($userid == $comm['id']){
+            echo"
+            <tr>
+            <td>{$comm['name']}</td>
+            <td>
+            <p>{$comm['content']}</p>
+       </td></tr>";
+       ?>
+    
+           }
+        }
+       <tr>  
+       <form method='POST' action='postcontroller.php'>
             <td><input type='text' id='newcomment' name='newcomment' placeholder='write your comment'/></td>
-            if($_SESSION['name']==$row['name']){
-           <td><a href='commentDelete.php?id={$row['id']}'>Delete</a></td>
-           <td><a href='commentEdit.php?id={$row['id']}'>Edit</a></td>
-            }
-         </tr>";
-    }
+            <td><input type='submit' name='addcomment' value='add'/></td>
+            </from>
            
-        }
+<?php
+            if($userid==$id){
+                echo"
+           <td><a href='commentdelete.php?id={$row['id']}'>Delete</a></td>
+           <td><a href='commentedit.php?id={$row['id']}'>Edit</a></td>";
+            }
+            echo"
+         </tr>";
             else{
                 echo "error connection DB";
             }

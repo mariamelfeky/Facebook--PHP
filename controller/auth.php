@@ -10,8 +10,7 @@ if(isset($_POST['login'])){
        session_start();
       $_SESSION['name']=$resData['name'];
       $_SESSION['id']=$resData['id'];
-
-echo $_SESSION['name'];
+      $_SESSION['imgProfile'] =$resData['image'];
       header("Location: ../postlist.php");
     }
     else {
@@ -27,12 +26,15 @@ elseif(isset($_POST['register'])){
     $dir_to_upload = "../view/upload/";
     $dir_tmp = $_FILES['image']['tmp_name'];
     if(!empty($_FILES['image']['name'])){
+        echo 'mmm';
         $imageName = basename($_FILES['image']['name']);
         $imagePath =  $dir_to_upload.$imageName;
         $imageType = pathinfo($imagePath,PATHINFO_EXTENSION);
         $typeAllaw = array("jpg","jpeg","png");
         if(in_array($imageType,$typeAllaw)){
+            echo'nn';
             if(move_uploaded_file($dir_tmp,$imagePath)){
+                echo 'ff';
                 $result=  mysqli_query($connect,"insert into user set
                    name = '$name',
                    email = '$email',
@@ -44,7 +46,7 @@ elseif(isset($_POST['register'])){
     }
     else {
        // header("location : ../view/bootstrap/login/register.php");
-       echo "error";
+       //echo "error";
     }
             }
         }
